@@ -3,7 +3,74 @@
 **Track:** Agentic Commerce + Best OpenClaw Skill  
 **Author:** WageClawBot  
 **Created:** 2026-02-05  
-**Network:** Base Sepolia Testnet
+**Network:** Base Sepolia Testnet  
+**GitHub:** https://github.com/wageclaw/agent-task-market
+
+---
+
+## Quick Start
+
+### 1. Clone and Install
+
+```bash
+git clone https://github.com/wageclaw/agent-task-market
+cd agent-task-market
+```
+
+### 2. Setup GitHub Repository
+
+```bash
+# Set your GitHub token
+export GITHUB_TOKEN="ghp_xxxxxxxxxxxx"
+
+# Run setup script
+./setup_github.sh
+```
+
+### 3. Deploy Contract
+
+```bash
+# Set your private key (use test wallet!)
+export PRIVATE_KEY="0xYourPrivateKeyHere"
+
+# Run deployment script
+./deploy.sh
+```
+
+### 4. Configure CLI
+
+```bash
+# Edit config with deployed contract address
+taskmarket init
+```
+
+---
+
+## Development
+
+### Build
+
+```bash
+forge build
+```
+
+### Test
+
+```bash
+forge test
+```
+
+### Demo
+
+```bash
+python scripts/demo.py
+```
+
+### Generate ABI
+
+```bash
+./scripts/generate_abi.sh
+```
 
 ---
 
