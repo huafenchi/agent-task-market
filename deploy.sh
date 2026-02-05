@@ -51,10 +51,13 @@ echo ""
 # Check balance
 echo "检查余额..."
 ETH_BALANCE=$(cast balance "$DEPLOYER" --rpc-url "$RPC_URL")
-USDC_BALANCE=$(cast call "$USDC_ADDRESS" "balanceOf(address)(uint256)" "$DEPLOYER" --rpc-url "$RPC_URL" | cast to-decimal --decimals 6)
+USDC_BALANCE=$(cast call "$USDC_ADDRESS" "balanceOf(address)(uint256)" "$DEPLOYER" --rpc-url "$RPC_URL" | cast --to-dec)
 
-echo "ETH: $(echo "$ETH_BALANCE" | cast to-decimal --decimals 18) ETH"
-echo "USDC: $USDC_BALANCE USDC"
+ETH_ETH=$(echo "$ETH_BALANCE" | cast --to-wei | cast --to-fix 18)
+USDC_USDC=$(echo "$USDC_BALANCE" | cast --to-fix 6)
+
+echo "ETH: $ETH_ETH ETH"
+echo "USDC: $USDC_USDC USDC"
 echo ""
 
 if [ "$(echo "$ETH_BALANCE" | cast to-unit ether)" = "0" ]; then

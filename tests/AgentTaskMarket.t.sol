@@ -3,6 +3,7 @@ pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
 import "../contracts/AgentTaskMarket.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract AgentTaskMarketTest is Test {
     AgentTaskMarket public taskMarket;
@@ -53,14 +54,13 @@ contract AgentTaskMarketTest is Test {
         
         assertEq(taskId, 1);
         
-        (uint256 id, address taskCreator, string memory title, uint256 reward, AgentTaskMarket.TaskStatus status) = 
-            taskMarket.getTaskStruct(0);
+        AgentTaskMarket.Task memory task = taskMarket.getTask(0);
         
-        assertEq(id, 1);
-        assertEq(taskCreator, creator);
-        assertEq(title, "Test Task");
-        assertEq(reward, 50 * 10**6);
-        assertEq(uint(status), uint(AgentTaskMarket.TaskStatus.Open));
+        assertEq(task.id, 1);
+        assertEq(task.creator, creator);
+        assertEq(task.title, "Test Task");
+        assertEq(task.reward, 50 * 10**6);
+        assertEq(uint(task.status), uint(AgentTaskMarket.TaskStatus.Open));
     }
     
     function testCreateTaskWithInvalidReward() public {
@@ -95,7 +95,7 @@ contract AgentTaskMarketTest is Test {
         vm.prank(runner1);
         taskMarket.submitBid(0, "I can do this task!");
         
-        Bid[] memory bids = taskMarket.getTaskBids(0);
+        AgentTaskMarket.Bid[] memory bids = taskMarket.getTaskBids(0);
         assertEq(bids.length, 1);
         assertEq(bids[0].bidder, runner1);
         assertEq(bids[0].proposal, "I can do this task!");
@@ -128,9 +128,9 @@ contract AgentTaskMarketTest is Test {
         vm.prank(creator);
         taskMarket.acceptBid(0, 0);
         
-        (,,,,,,, address runner, AgentTaskMarket.TaskStatus status) = taskMarket.getTaskStruct(0);
-        assertEq(runner, runner1);
-        assertEq(uint(status), uint(AgentTaskMarket.TaskStatus.InProgress));
+        AgentTaskMarket.Task memory task = taskMarket.getTask(0);
+        assertEq(task.runner, runner1);
+        assertEq(uint(task.status), uint(AgentTaskMarket.TaskStatus.InProgress));
     }
     
     function testAcceptBidByNonCreator() public {
@@ -162,8 +162,8 @@ contract AgentTaskMarketTest is Test {
         vm.prank(runner1);
         taskMarket.submitTask(0, "https://github.com/user/repo");
         
-        (, , , , , , , , , uint256 completedAt) = taskMarket.getTaskStruct(0);
-        assertGt(completedAt, 0);
+        AgentTaskMarket.Task memory task = taskMarket.getTask(0);
+        assertGt(task.completedAt, 0);
     }
     
     // ============ Test: Complete Task ============
@@ -251,8 +251,8 @@ contract AgentTaskMarketTest is Test {
         uint256 balanceAfter = MockUSDC(usdc).balanceOf(creator);
         assertEq(balanceAfter - balanceBefore, 50 * 10**6);
         
-        (,,,,,,, , , , AgentTaskMarket.TaskStatus status) = taskMarket.getTaskStruct(0);
-        assertEq(uint(status), uint(AgentTaskMarket.TaskStatus.Cancelled));
+        AgentTaskMarket.Task memory task = taskMarket.getTask(0);
+        assertEq(uint(task.status), uint(AgentTaskMarket.TaskStatus.Cancelled));
     }
     
     function testCancelTaskByNonCreator() public {
@@ -316,7 +316,7 @@ contract AgentTaskMarketTest is Test {
         vm.prank(runner2);
         taskMarket.submitBid(0, "Runner 2 bid");
         
-        Bid[] memory bids = taskMarket.getTaskBids(0);
+        AgentTaskMarket.Bid[] memory bids = taskMarket.getTaskBids(0);
         assertEq(bids.length, 2);
         assertEq(bids[0].bidder, runner1);
         assertEq(bids[1].bidder, runner2);
@@ -358,60 +358,5 @@ contract MockUSDC is ERC20 {
     
     function decimals() public pure override returns (uint8) {
         return 6;
-    }
-}
-
-// Helper interface for testing
-interface ERC20 {
-    function balanceOf(address account) external view returns (uint256);
-    function transfer(address to, uint256 amount) external returns (bool);
-    function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(address from, address to, uint256 amount) external returns (bool);
-    function _mint(address to, uint256 amount) external;
-}
-
-contract MockUSDC {
-    mapping(address => uint256) private _balances;
-    uint256 private _totalSupply;
-    string public name = "Mock USDC";
-    string public symbol = "USDC";
-    uint8 public decimals = 6;
-    
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    
-    function balanceOf(address account) public view returns (uint256) {
-        return _balances[account];
-    }
-    
-    function transfer(address to, uint256 amount) public returns (bool) {
-        require(_balances[msg.sender] >= amount, "Insufficient balance");
-        _balances[msg.sender] -= amount;
-        _balances[to] += amount;
-        emit Transfer(msg.sender, to, amount);
-        return true;
-    }
-    
-    function approve(address spender, uint256 amount) public returns (bool) {
-        // Simplified for testing
-        return true;
-    }
-    
-    function transferFrom(address from, address to, uint256 amount) public returns (bool) {
-        require(_balances[from] >= amount, "Insufficient balance");
-        _balances[from] -= amount;
-        _balances[to] += amount;
-        emit Transfer(from, to, amount);
-        return true;
-    }
-    
-    function mint(address to, uint256 amount) public {
-        _balances[to] += amount;
-        _totalSupply += amount;
-        emit Transfer(address(0), to, amount);
-    }
-    
-    function totalSupply() public view returns (uint256) {
-        return _totalSupply;
     }
 }

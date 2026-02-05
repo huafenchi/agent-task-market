@@ -10,7 +10,23 @@ contract DeployScript is Script {
     
     function run() public {
         // Get deployment private key from environment
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        // Can be with or without 0x prefix
+        string memory pk = vm.envString("PRIVATE_KEY");
+        uint256 deployerPrivateKey;
+        
+        // Check if it has 0x prefix
+        bytes memory pkBytes = bytes(pk);
+        if (pkBytes.length >= 2 && pkBytes[0] == "0" && pkBytes[1] == "x") {
+            // Remove 0x prefix and parse as hex
+            bytes memory pkWithoutPrefix = new bytes(pkBytes.length - 2);
+            for (uint i = 0; i < pkWithoutPrefix.length; i++) {
+                pkWithoutPrefix[i] = pkBytes[i + 2];
+            }
+            deployerPrivateKey = uint256(bytes32(pkWithoutPrefix));
+        } else {
+            deployerPrivateKey = uint256(bytes32(pkBytes));
+        }
+        
         address deployer = vm.addr(deployerPrivateKey);
         
         console.log("Deployer address:", deployer);

@@ -4,7 +4,6 @@ out = 'out'
 libs = ['lib']
 test = 'tests'
 ffi = true
-gas_reports = ['*']
 eth_rpc_url = 'https://sepolia.base.org'
 fs_permissions = [{ access = 'read-write', path = '.' }]
 

@@ -289,6 +289,13 @@ contract AgentTaskMarket {
         );
     }
     
+    /// @notice Get agent's task history (list of task IDs)
+    /// @param agent The agent address
+    /// @return Array of task IDs the agent has completed
+    function getAgentTaskHistory(address agent) external view returns (uint256[] memory) {
+        return agentTasks[agent];
+    }
+    
     /// @notice Get total task count
     function getTaskCount() external view returns (uint256) {
         return tasks.length;
