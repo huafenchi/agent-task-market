@@ -1,0 +1,11 @@
+
+# Security - Never commit private keys
+*.key
+*private*
+*secret*
+.env
+.env.*
+*.pem
+wallet*.txt
+*_backup.txt
+.secrets/
