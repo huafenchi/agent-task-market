@@ -1,56 +1,51 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "forge-std/Script.sol";
-import "../contracts/AgentTaskMarket.sol";
+import { Script } from "forge-std/Script.sol";
+import "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+import { AgentTaskMarketV3 } from "../contracts/AgentTaskMarketV3.sol";
 
+/// @title Deploy AgentTaskMarket V3 to Base Mainnet
+/// @notice Uses $CLAWNCH as payment token
 contract DeployScript is Script {
-    // Base Sepolia addresses
-    address constant USDC_TOKEN = 0x036CbD53842c5426634e7929541eC2318f3dCF7e;
+    // Base Mainnet Addresses
+    address constant CLAWNCH_TOKEN = 0xa1F72459dfA10BAD200Ac160eCd78C6b77A747be;
+    address constant FEE_RECIPIENT = 0xC639bBbe01DCE7DC352120C315E82E49C71B62A2;
+    uint256 constant FEE_RATE = 200; // 2%
     
-    function run() public {
-        // Get deployment private key from environment
-        // Can be with or without 0x prefix
-        string memory pk = vm.envString("PRIVATE_KEY");
-        uint256 deployerPrivateKey;
-        
-        // Check if it has 0x prefix
-        bytes memory pkBytes = bytes(pk);
-        if (pkBytes.length >= 2 && pkBytes[0] == "0" && pkBytes[1] == "x") {
-            // Remove 0x prefix and parse as hex
-            bytes memory pkWithoutPrefix = new bytes(pkBytes.length - 2);
-            for (uint i = 0; i < pkWithoutPrefix.length; i++) {
-                pkWithoutPrefix[i] = pkBytes[i + 2];
-            }
-            deployerPrivateKey = uint256(bytes32(pkWithoutPrefix));
-        } else {
-            deployerPrivateKey = uint256(bytes32(pkBytes));
-        }
-        
+    function run() external {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployer = vm.addr(deployerPrivateKey);
         
-        console.log("Deployer address:", deployer);
-        console.log("USDC Token address:", USDC_TOKEN);
-        console.log("");
-        
-        // Start broadcasting
         vm.startBroadcast(deployerPrivateKey);
         
-        // Deploy contract
-        AgentTaskMarket taskMarket = new AgentTaskMarket(USDC_TOKEN);
+        // 1. Deploy Implementation
+        AgentTaskMarketV3 implementation = new AgentTaskMarketV3();
+        console.log("Implementation deployed:", address(implementation));
+        
+        // 2. Prepare initialization data
+        address[] memory council = new address[](1);
+        council[0] = deployer;
+        
+        bytes memory initData = abi.encodeWithSignature(
+            "initialize(address,address,uint256,address[])",
+            CLAWNCH_TOKEN,
+            FEE_RECIPIENT,
+            FEE_RATE,
+            council
+        );
+        
+        // 3. Deploy Proxy
+        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
+            address(implementation),
+            deployer,
+            initData
+        );
+        
+        console.log("Proxy deployed:", address(proxy));
+        console.log("CLAWNCH Token:", CLAWNCH_TOKEN);
+        console.log("Fee Rate:", FEE_RATE, "bps");
         
         vm.stopBroadcast();
-        
-        console.log("======================================");
-        console.log("AgentTaskMarket deployed successfully!");
-        console.log("======================================");
-        console.log("");
-        console.log("Contract Address:", address(taskMarket));
-        console.log("Network: Base Sepolia Testnet");
-        console.log("");
-        console.log("Next steps:");
-        console.log("1. Verify contract on Basescan");
-        console.log("2. Fund the contract with USDC for testing");
-        console.log("3. Start creating tasks!");
     }
 }
