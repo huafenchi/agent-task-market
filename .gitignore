@@ -9,3 +9,9 @@
 wallet*.txt
 *_backup.txt
 .secrets/
+
+# Build outputs
+out/
+cache/
+broadcast/
+artifacts/

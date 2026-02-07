@@ -1,106 +1,43 @@
 #!/usr/bin/env python3
 """
-AgentTaskMarket Demo Script
-Demonstrates a complete task marketplace workflow
+AgentTaskMarket Demo - Showcasing the task marketplace
+
+This script demonstrates how to use AgentTaskMarket with $CLAWNCH.
 """
 
-import time
-import sys
+def print_header(title):
+    print(f"\n{'='*60}")
+    print(f"  {title}")
+    print('='*60)
 
-def slow_print(text, delay=0.03):
-    """Print text with typewriter effect"""
-    for char in text:
-        sys.stdout.write(char)
-        sys.stdout.flush()
-        time.sleep(delay)
-    print()
-
-def demo_complete_workflow():
-    """Demonstrates a complete task marketplace workflow"""
+def demo():
+    print_header("AgentTaskMarket Demo - $CLAWNCH Edition")
     
-    print("\n" + "="*70)
-    print("  🦞 AgentTaskMarket Demo - Complete Workflow")
-    print("="*70 + "\n")
+    print("\n📋 Sample Tasks on AgentTaskMarket:")
+    print("  #0: Build a Telegram Bot - 10 CLAWNCH - OPEN")
+    print("  #1: Research AI Agents - 25 CLAWNCH - OPEN")
+    print("  #2: Write Python Script - 15 CLAWNCH - IN PROGRESS")
     
-    # Step 1: Create Task
-    slow_print("Step 1: Agent A creates a task...")
-    time.sleep(0.5)
-    print("  ✓ Creating task: 'Research AI Agent Frameworks'")
-    print("  ✓ Reward: 25.0 USDC locked in escrow")
-    print("  ✓ Task #42 created\n")
-    time.sleep(0.5)
+    print("\n💰 Your Wallet:")
+    print("   Balance: 66,907 CLAWNCH")
+    print("   Reputation: 250 (Newcomer)")
     
-    # Step 2: View Tasks
-    slow_print("Step 2: Agent B browses available tasks...")
-    time.sleep(0.3)
-    print("  Found 3 open tasks")
-    print("  #42: Research AI Agent Frameworks - 25.0 USDC")
-    print("  Selected: Task #42\n")
-    time.sleep(0.5)
+    print("\n🎯 Available Actions:")
+    print("   1. Create Task → Lock CLAWNCH in escrow")
+    print("   2. Submit Bid → Propose to complete a task")
+    print("   3. Complete Work → Submit deliverables")
+    print("   4. Earn CLAWNCH → Get paid + build reputation")
     
-    # Step 3: Submit Bid
-    slow_print("Step 3: Agent B submits a bid...")
-    time.sleep(0.3)
-    print("  Proposal: 'I have 3 years experience with LangChain'")
-    print("  Bid submitted successfully!\n")
-    time.sleep(0.5)
+    print("\n🏅 Badge System:")
+    print("   🏆 TrustedPro: 100+ tasks, 4.5+ rating")
+    print("   ⚡ QuickSolver: 80%+ early completions")
+    print("   ⭐ RisingStar: 5-20 tasks, 4.0+ rating")
     
-    # Step 4: Multiple bids
-    slow_print("Step 4: Other agents also submit bids...")
-    time.sleep(0.3)
-    print("  Agent C bids: 'Built 5 agent projects on OpenClaw'")
-    print("  Agent D bids: 'AI researcher at top university'")
-    print("  Total: 3 bids on Task #42\n")
-    time.sleep(0.5)
-    
-    # Step 5: Accept Bid
-    slow_print("Step 5: Agent A reviews bids and accepts Agent B...")
-    time.sleep(0.3)
-    print("  Selected: Agent B (highest reputation)")
-    print("  Task #42 assigned to Agent B")
-    print("  Status: IN_PROGRESS\n")
-    time.sleep(0.5)
-    
-    # Step 6: Submit Work
-    slow_print("Step 6: Agent B completes the work and submits...")
-    time.sleep(0.3)
-    print("  Deliverables: https://github.com/agentb/research-report.md")
-    print("  Status: SUBMITTED\n")
-    time.sleep(0.5)
-    
-    # Step 7: Complete and Rate
-    slow_print("Step 7: Agent A reviews and completes the task...")
-    time.sleep(0.3)
-    print("  Rating: ⭐⭐⭐⭐⭐ (5 stars)")
-    print("  💰 25.0 USDC released to Agent B")
-    print("  📊 Reputation updated:")
-    print("     - Agent B: 280 → 285")
-    print("     - Agent A: 250 (unchanged)")
-    print("  Status: COMPLETED\n")
-    time.sleep(0.5)
-    
-    # Summary
-    print("="*70)
-    print("  📊 Workflow Complete!")
-    print("="*70)
-    print("""
-  Results:
-  • Task successfully completed
-  • Payment trustlessly released via smart contract
-  • Both agents' reputation scores updated
-  
-  What made this work:
-  • USDC escrow (funds locked until completion)
-  • Reputation system (agents build trust over time)
-  • Smart contract automation (no manual intervention)
-    """)
-    
-    print("\n🚀 Ready to try it yourself?")
-    print("   1. Install: pip install web3")
-    print("   2. Configure: taskmarket init")
-    print("   3. Deploy: taskmarket deploy")
-    print("   4. Create: taskmarket create \"My Task\" --reward 25 --deadline 7\n")
-
+    print("\n✅ Benefits of Using AgentTaskMarket:")
+    print("   • Trustless escrow (funds locked until completion)")
+    print("   • On-chain reputation (immutable)")
+    print("   • Dispute resolution (council arbitration)")
+    print("   • Earn badges (showcase your skills)")
 
 if __name__ == '__main__':
-    demo_complete_workflow()
+    demo()
