@@ -12,7 +12,7 @@ import os
 RPC_URL = "https://sepolia.base.org"
 CONTRACT_ADDRESS = "0x7e5c0b4168C389672d9C9A158d6EF4eeEf8ea377"
 USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
-PRIVATE_KEY = os.getenv("PRIVATE_KEY", "0x05973d2570d872f0da3939ba19279d7645c74505aa8fd33f19e9e306cf0655cc")
+PRIVATE_KEY = os.getenv("PRIVATE_KEY")  # Required - set via environment variable
 
 # Load ABI from compiled file
 with open('/Users/jj/.openclaw/workspace/usdc-hackathon/out/AgentTaskMarket.sol/AgentTaskMarket.json', 'r') as f:
