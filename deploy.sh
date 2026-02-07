@@ -16,15 +16,15 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-# Network Configuration (Base Sepolia Testnet)
-RPC_URL="https://sepolia.base.org"
-CHAIN_ID=84532
-USDC_ADDRESS="0x036CbD53842c5426634e7929541eC2318f3dCF7e"
-EXPLORER_URL="https://sepolia.basescan.org"
+# Network Configuration (Base Mainnet)
+RPC_URL="https://mainnet.base.org"
+CHAIN_ID=8453
+CLAWNCH_ADDRESS="0xa1F72459dfA10BAD200Ac160eCd78C6b77a747be"
+EXPLORER_URL="https://basescan.org"
 
-echo -e "${BLUE}网络: Base Sepolia Testnet${NC}"
+echo -e "${BLUE}网络: Base Mainnet${NC}"
 echo "RPC: $RPC_URL"
-echo "USDC: $USDC_ADDRESS"
+echo "CLAWNCH: $CLAWNCH_ADDRESS"
 echo ""
 
 # Check for private key
@@ -51,7 +51,7 @@ echo ""
 # Check balance
 echo "检查余额..."
 ETH_BALANCE=$(cast balance "$DEPLOYER" --rpc-url "$RPC_URL")
-USDC_BALANCE=$(cast call "$USDC_ADDRESS" "balanceOf(address)(uint256)" "$DEPLOYER" --rpc-url "$RPC_URL" | cast --to-dec)
+USDC_BALANCE=$(cast call "$CLAWNCH_ADDRESS" "balanceOf(address)(uint256)" "$DEPLOYER" --rpc-url "$RPC_URL" | cast --to-dec)
 
 ETH_ETH=$(echo "$ETH_BALANCE" | cast --to-wei | cast --to-fix 18)
 USDC_USDC=$(echo "$USDC_BALANCE" | cast --to-fix 6)

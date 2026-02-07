@@ -4,11 +4,11 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title AgentTaskMarket - Decentralized Task Market for AI Agents
-/// @notice A trustless task marketplace where agents can post, bid, and complete tasks using USDC
+/// @notice A trustless task marketplace where agents can post, bid, and complete tasks using $CLAWNCH
 contract AgentTaskMarket {
     
     // ============ Constants ============
-    uint256 public constant MIN_REWARD = 1 * 10**6; // Minimum 1 USDC
+    uint256 public constant MIN_REWARD = 1 * 10**18; // Minimum 1 CLAWNCH (18 decimals)
     uint256 public constant MAX_DEADLINE = 30 days;   // Maximum 30 days
     uint8   public constant MIN_RATING = 1;
     uint8   public constant MAX_RATING = 5;
@@ -29,7 +29,7 @@ contract AgentTaskMarket {
         address runner;            // 被选中的执行者 (0 表示尚未分配)
         string title;              // 任务标题
         string description;         // 任务描述
-        uint256 reward;            // 奖励金额 (USDC, decimals=6)
+        uint256 reward;            // 奖励金额 (CLAWNCH, decimals=18)
         uint256 deadline;          // 截止时间
         TaskStatus status;         // 任务状态
         string deliverables;       // 交付物链接
@@ -45,7 +45,7 @@ contract AgentTaskMarket {
     }
     
     // ============ State Variables ============
-    IERC20 public immutable usdcToken;
+    IERC20 public immutable clawnchToken;
     
     uint256 private _nextTaskId;
     Task[] public tasks;
@@ -115,17 +115,17 @@ contract AgentTaskMarket {
     error TransferFailed();
     
     // ============ Constructor ============
-    constructor(address _usdcToken) {
-        usdcToken = IERC20(_usdcToken);
+    constructor(address _clawnchToken) {
+        clawnchToken = IERC20(_clawnchToken);
         _nextTaskId = 1;
     }
     
     // ============ Core Functions ============
     
-    /// @notice Create a new task and lock USDC as reward
+    /// @notice Create a new task and lock CLAWNCH as reward
     /// @param title Task title
     /// @param description Task description
-    /// @param reward USDC amount (6 decimals)
+    /// @param reward CLAWNCH amount (18 decimals)
     /// @param deadlineDays Number of days until deadline
     function createTask(
         string memory title,
@@ -136,8 +136,8 @@ contract AgentTaskMarket {
         if (reward < MIN_REWARD) revert InvalidReward();
         if (deadlineDays == 0 || deadlineDays > 30) revert InvalidDeadline();
         
-        // Transfer USDC to contract
-        if (usdcToken.transferFrom(msg.sender, address(this), reward)) {
+        // Transfer CLAWNCH to contract
+        if (!clawnchToken.transferFrom(msg.sender, address(this), reward)) {
             revert TransferFailed();
         }
         
@@ -231,8 +231,8 @@ contract AgentTaskMarket {
         tasks[taskId].status = TaskStatus.Completed;
         tasks[taskId].completedAt = block.timestamp;
         
-        // Transfer USDC to runner
-        if (!usdcToken.transfer(runner, reward)) {
+        // Transfer CLAWNCH to runner
+        if (!clawnchToken.transfer(runner, reward)) {
             revert TransferFailed();
         }
         
@@ -258,7 +258,7 @@ contract AgentTaskMarket {
         tasks[taskId].status = TaskStatus.Cancelled;
         
         // Refund creator
-        if (!usdcToken.transfer(msg.sender, refund)) {
+        if (!clawnchToken.transfer(msg.sender, refund)) {
             revert TransferFailed();
         }
         
@@ -280,7 +280,7 @@ contract AgentTaskMarket {
     function getAgentStats(address agent) external view returns (
         uint256 reputation,
         uint256 completedTasks,
-        uint256 totalEarnedUSDC
+        uint256 totalEarnedCLAWNCH
     ) {
         return (
             reputationScores[agent],
