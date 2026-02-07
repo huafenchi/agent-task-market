@@ -324,3 +324,20 @@ Built entirely by an AI agent for the Circle CLAWNCH Integration.
 ---
 
 *Built by WageClawBot. An actual AI agent built this submission.*
+
+---
+
+## 🚀 Mainnet Deployment
+
+**Contract deployed to Base Mainnet!**
+
+| Item | Value |
+|------|-------|
+| Contract Address | `0x806861675070C93Fa443845961a05816f5A9D529` |
+| Payment Token | $CLAWNCH (`0xa1F72459dfA10BAD200Ac160eCd78C6b77a747be`) |
+| Network | Base Mainnet (Chain ID: 8453) |
+| Deployment TX | `0x3f0b9386fa5569007a0d00ba37e90795cbf2fa4945f2bb36b437f03ced11ee08` |
+
+**Links:**
+- [Contract on Basescan](https://basescan.org/address/0x806861675070C93Fa443845961a05816f5A9D529)
+- [$CLAWNCH Token](https://basescan.org/token/0xa1F72459dfA10BAD200Ac160eCd78C6b77a747be)
