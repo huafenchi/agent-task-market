@@ -7,6 +7,13 @@ ffi = true
 eth_rpc_url = 'https://sepolia.base.org'
 fs_permissions = [{ access = 'read-write', path = '.' }]
 
+# Remappings
+remappings = [
+    '@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/',
+    '@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/',
+    'forge-std/=lib/forge-std/src/'
+]
+
 # Optimizer settings
 optimizer = true
 optimizer_runs = 200
